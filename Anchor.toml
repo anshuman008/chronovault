@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-chronovault = "GUXotqYYMotNh12quGgD6ovqcM3YRUC1t7axk1iDYWth"
+chronovault = "AM37vnJ3mXiMSNSfaeTV1ZVicK7zoyxWqVrrBdnikUb"
 
 [registry]
 url = "https://api.apr.dev"

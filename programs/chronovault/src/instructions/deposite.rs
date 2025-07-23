@@ -1,12 +1,10 @@
-use anchor_lang::{prelude::*, solana_program::example_mocks::solana_sdk::clock};
-use anchor_spl::{associated_token::AssociatedToken, token_2022, token_interface::{transfer_checked, Mint, TokenAccount, TokenInterface, TransferChecked}};
+use anchor_lang::prelude::*;
+use anchor_spl::{associated_token::AssociatedToken, token_interface::{transfer_checked, Mint, TokenAccount, TokenInterface, TransferChecked}};
 use crate::state::ChronoVault;
 
 
 
 
-
-// deposit accounts
 
 
 #[derive(Accounts)]
@@ -58,7 +56,7 @@ pub struct DepositeStruct <'info> {
 
     //  programs
      pub associated_token_program:Program<'info,AssociatedToken>,
-     pub token_program:Program<'info,TokenInterface>,
+     pub token_program:Interface<'info,TokenInterface>,
      pub system_program:Program<'info,System>, 
 }
 

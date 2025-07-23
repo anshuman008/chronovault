@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use anchor_spl::{associated_token::AssociatedToken, token::{close_account, CloseAccount}, token_2022, token_interface::{transfer_checked, Mint, TokenAccount, TokenInterface, TransferChecked}};
+use anchor_spl::{associated_token::AssociatedToken, token::{close_account, CloseAccount}, token_interface::{transfer_checked, Mint, TokenAccount, TokenInterface, TransferChecked}};
 use crate::error::ChronoVaultError;
 use crate::state::ChronoVault;
 
@@ -62,17 +62,24 @@ pub recipient_ata:InterfaceAccount<'info,TokenAccount>,
 
   //  programs
      pub associated_token_program:Program<'info,AssociatedToken>,
-     pub token_program:Program<'info,TokenInterface>,
+     pub token_program:Interface<'info,TokenInterface>,
      pub system_program:Program<'info,System>, 
 
 }
 
 
 
-impl <'info> WithdrawStruct <'info>{
+impl <'info> WithdrawStruct<'info>{
+
+   pub fn withdraw(&mut self) -> Result<()> {
+
+       self.withdraw_and_close_vault()?;
+
+        Ok(())
+    }
+
     
     pub fn withdraw_and_close_vault(&self) -> Result<()>{
-
 
         let clock = Clock::get()?;
         let current_time = clock.unix_timestamp as u64;
@@ -118,4 +125,6 @@ impl <'info> WithdrawStruct <'info>{
             Ok(())
 
     }
+
+
 }
