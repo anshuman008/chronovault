@@ -103,7 +103,7 @@ impl <'info> WithdrawStruct<'info>{
                 TransferChecked { 
                     from: self.vault.to_account_info(), 
                     mint: self.mint.to_account_info(), 
-                    to: self.recipient.to_account_info(),
+                    to: self.recipient_ata.to_account_info(),
                     authority: self.chrono_account.to_account_info()
                 },
                 signer_seeds
