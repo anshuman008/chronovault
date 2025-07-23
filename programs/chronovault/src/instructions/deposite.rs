@@ -27,7 +27,7 @@ pub struct DepositeStruct <'info> {
     #[account(
         init,
         payer = signer,
-        space = ChronoVault::INIT_SPACE + ChronoVault::DESCRIMINATOR.len(),
+        space = ChronoVault::INIT_SPACE + ChronoVault::DISCRIMINATOR.len(),
         seeds =[b"chrono_vault",signer.key().as_ref(),seed.to_le_bytes().as_ref()],
         bump
     )]
@@ -103,5 +103,9 @@ impl <'info> DepositeStruct <'info>{
 }
 
 
+pub fn helper(ctx:Context<DepositeStruct>,seed:u64,amount:u64,lock_duration:u64) -> Result<()> {
+     ctx.accounts.initialize_account(seed, lock_duration, ctx.bumps.chrono_account)?;
+     ctx.accounts.deposite_tokens(amount)    
+}
 
 
