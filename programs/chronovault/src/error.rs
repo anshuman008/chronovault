@@ -6,7 +6,9 @@ pub enum ChronoVaultError {
     #[msg("Lock time is not completed yet")]
     InvalidTime,
     #[msg("Invalid depositer")]
-    InvalidMaker,
+    InvalidDepsiter,
+    #[msg("Invalid recipient not authorized")]
+    InvalidRecipient,
     #[msg("Invalid mint")]
     InvalidMint,
 }
