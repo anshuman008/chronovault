@@ -1,4 +1,4 @@
-use anchor_lang::prelude::*;
+use anchor_lang::{prelude::*, solana_program::example_mocks::solana_sdk::clock};
 use anchor_spl::{associated_token::AssociatedToken, token_2022, token_interface::{transfer_checked, Mint, TokenAccount, TokenInterface, TransferChecked}};
 use crate::state::ChronoVault;
 
@@ -61,5 +61,47 @@ pub struct DepositeStruct <'info> {
      pub token_program:Program<'info,TokenInterface>,
      pub system_program:Program<'info,System>, 
 }
+
+impl <'info> DepositeStruct <'info>{
+    
+    pub fn initialize_account(&mut self,seed:u64,lock_duration:u64, bump:u8) -> Result<()>{
+
+       let clock = Clock::get()?;
+       let current_time = clock.unix_timestamp as u64;
+       let unlock_time = current_time + lock_duration;
+
+       self.chrono_account.set_inner(ChronoVault { 
+          seed: seed,
+          depositer: self.signer.key(), 
+          recipient: self.recipient_key.key(), 
+          mint: self.mint.key(),
+          deposit_time: current_time,
+          unlock_time: unlock_time,
+          bump: bump 
+        });
+
+        Ok(())
+    }
+
+
+    pub fn deposite_tokens(&self,amount:u64) -> Result<()>{
+      
+      transfer_checked(
+        CpiContext::new(self.token_program.to_account_info(), 
+        TransferChecked { 
+            from: self.user_ata.to_account_info(), 
+            mint: self.mint.to_account_info(), 
+            to: self.vault.to_account_info(),
+            authority: self.signer.to_account_info() 
+        }),
+        amount,
+        self.mint.decimals)?;
+
+        Ok(())
+    }
+
+}
+
+
 
 
