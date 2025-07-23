@@ -34,7 +34,6 @@ pub mint:InterfaceAccount<'info,Mint>,
 )]
 pub chrono_account:Account<'info,ChronoVault>,
 
-
 // vault
 #[
     account(

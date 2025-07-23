@@ -12,7 +12,6 @@ describe("chronovault", () => {
   anchor.setProvider(anchor.AnchorProvider.env());
 
   const program = anchor.workspace.chronovault as Program<Chronovault>;
-  const provider = anchor.AnchorProvider.env();
 
   const user = anchor.web3.Keypair.fromSecretKey(
     bs58.decode(process.env.DEV_WALLET!)
@@ -36,7 +35,7 @@ describe("chronovault", () => {
     owner: recipient.publicKey,
   });
 
-  const seed = new anchor.BN(1098);
+  const seed = new anchor.BN(1143);
   const seeds = [
     Buffer.from("chrono_vault"),
     user.publicKey.toBuffer(),
@@ -70,7 +69,7 @@ describe("chronovault", () => {
         chronoAccount: chronoAccount,
         vault: vault,
         userAta: userAta,
-        recipientKey: recipient.publicKey,
+        recipientKey: user.publicKey,
         associatedTokenProgram: anchor.utils.token.ASSOCIATED_PROGRAM_ID,
         tokenProgram: anchor.utils.token.TOKEN_PROGRAM_ID,
         systemProgram: anchor.web3.SystemProgram.programId,
@@ -107,17 +106,17 @@ describe("chronovault", () => {
         .withdraw()
         .accounts({
           //@ts-ignore
-          recipient: recipient.publicKey,
+          recipient: user.publicKey,
           depositer: user.publicKey,
           mint: mint,
-          chronoAccount: chronoAccount,
+          chronoAccount: user.publicKey,
           vault: vault,
-          recipientAta: recipientAta,
+          recipientAta: userAta,
           associatedTokenProgram: anchor.utils.token.ASSOCIATED_PROGRAM_ID,
           tokenProgram: anchor.utils.token.TOKEN_PROGRAM_ID,
           systemProgram: anchor.web3.SystemProgram.programId,
         })
-        .signers([recipient])
+        .signers([user])
         .rpc();
 
       expect.fail(
@@ -148,18 +147,18 @@ describe("chronovault", () => {
       .withdraw()
       .accounts({
         //@ts-ignore
-        recipient: recipient.publicKey,
+        recipient: user.publicKey,
         depositer: user.publicKey,
         mint: mint,
         //@ts-ignore
         chronoAccount: chronoAccount,
         vault: vault,
-        recipientAta: recipientAta,
+        recipientAta: userAta,
         associatedTokenProgram: anchor.utils.token.ASSOCIATED_PROGRAM_ID,
         tokenProgram: anchor.utils.token.TOKEN_PROGRAM_ID,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
-      .signers([recipient])
+      .signers([user])
       .rpc();
 
     console.log("Withdraw sucesss!! Signature:", itx);
