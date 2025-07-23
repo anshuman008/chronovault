@@ -23,7 +23,7 @@ pub struct DepositeStruct <'info> {
     )]
     pub mint:InterfaceAccount<'info,Mint>,
     
-    // chronovault
+    // chronoaccount
     #[account(
         init,
         payer = signer,
